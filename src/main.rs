@@ -1,12 +1,32 @@
 use std::net::{TcpListener, TcpStream};
-use std::net::{Ipv4Addr};
-use std::io::{Read, Write};
+use std::io::{Write};
+use std::io::{Result};
 
-fn init_server() -> Ipv4Addr {
-    let localhost = Ipv4Addr::new(127, 0, 0, 1);
-    return localhost;
+fn handler(mut stream: TcpStream) -> Result<()> {
+    stream.write_all(b"Hello World!")?;
+    stream.flush()?;
+    Ok(())
+}
+
+fn init_server() -> Result<()> {
+    let listener = TcpListener::bind("127.0.0.1:8000").unwrap();
+
+    for stream in listener.incoming() {
+        match stream {
+            Ok(stream) => {
+                let _ = handler(stream);
+                println!("Connection handled!");
+            }
+            Err(e) => {
+                eprintln!("Connection failed: {}", e);
+            }
+        }
+    }
+
+    Ok(())
 }
 
 fn main() {
-    init_server();
+    // Need to handle Result<()> for this 
+    let _ = init_server();
 }
