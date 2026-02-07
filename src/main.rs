@@ -1,14 +1,10 @@
 mod server;
 mod storage;
 
+use storage::Storage;
+
 fn main() {
     // Need to handle Result<()> for this 
-    // let _ = server::init_server();
-    //
-    let mut unit = storage::Storage::new();
-    let key = "Hello";
-    let value = "thisexamplestring";
-
-    unit.set(key, value);
-    let result = unit.get(key);
+    let mut _storage = Storage::new();
+    let _ = server::init_server();
 }
